@@ -2,20 +2,20 @@
 Here I am try to perfom analysis using Natural Language Processing of the article “How Presidential Elections Affect the Markets” from 
 "Merill Lynch" https://www.ml.com/articles/how-presidential-elections-affect-the-markets.html
 
-##Entity Recognition/extraction, Visualising output
+    ##Entity Recognition/extraction, Visualising output
 
-require(rJava)
-require(NLP)
-require(openNLP)
-library(magrittr)
+    require(rJava)
+    require(NLP)
+    require(openNLP)
+    library(magrittr)
 
-text <- readLines("AE_Market.txt")
-print(text)
-text <- paste(text, collapse = " ")
-print(text)
-text <- as.String(text)
-text
-##
+    text <- readLines("AE_Market.txt")
+    print(text)
+    text <- paste(text, collapse = " ")
+    print(text)
+    text <- as.String(text)
+    text
+
 ## Chunking needs word token annotations with POS tags.
 sent_ann <- Maxent_Sent_Token_Annotator()
 word_ann <- Maxent_Word_Token_Annotator()
