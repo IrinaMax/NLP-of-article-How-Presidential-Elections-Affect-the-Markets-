@@ -17,51 +17,51 @@ Here I am try to perfom analysis using Natural Language Processing of the articl
     text
 
 ## Chunking needs word token annotations with POS tags.
-sent_ann <- Maxent_Sent_Token_Annotator()
-word_ann <- Maxent_Word_Token_Annotator()
-pos_ann <- Maxent_POS_Tag_Annotator()
+    sent_ann <- Maxent_Sent_Token_Annotator()
+    word_ann <- Maxent_Word_Token_Annotator()
+    pos_ann <- Maxent_POS_Tag_Annotator()
 
-pos_annotations <- annotate(text, list(sent_ann, word_ann, pos_ann))
-text_annotations <- annotate(text, list(sent_ann, word_ann))
-head(text_annotations)
+    pos_annotations <- annotate(text, list(sent_ann, word_ann, pos_ann))
+    text_annotations <- annotate(text, list(sent_ann, word_ann))
+    head(text_annotations)
            
-text_doc <- AnnotatedPlainTextDocument(text, text_annotations)         
-words(text_doc) %>% head(10)
+    text_doc <- AnnotatedPlainTextDocument(text, text_annotations)         
+    words(text_doc) %>% head(10)
 
-person_ann <- Maxent_Entity_Annotator(kind = "person")
-location_ann <- Maxent_Entity_Annotator(kind = "location")
-organization_ann <- Maxent_Entity_Annotator(kind = "organization")
-date_ann <- Maxent_Entity_Annotator(kind = "date")
-money_ann <- Maxent_Entity_Annotator(kind = "money")
+    person_ann <- Maxent_Entity_Annotator(kind = "person")
+    location_ann <- Maxent_Entity_Annotator(kind = "location")
+    organization_ann <- Maxent_Entity_Annotator(kind = "organization")
+    date_ann <- Maxent_Entity_Annotator(kind = "date")
+    money_ann <- Maxent_Entity_Annotator(kind = "money")
 
-pipeline <- list(sent_ann,
+    pipeline <- list(sent_ann,
                  word_ann,
                  person_ann,
                  location_ann,
                  organization_ann,
                  date_ann,
                  money_ann)
-text_annotations <- annotate(text, pipeline)
-text_annotations
-text_doc <- AnnotatedPlainTextDocument(text, text_annotations)
-text_doc
+    text_annotations <- annotate(text, pipeline)
+    text_annotations
+    text_doc <- AnnotatedPlainTextDocument(text, text_annotations)
+    text_doc
 
-entities <- function(doc, kind) {
-  s <- doc$content
-  a <- annotations(doc)[[1]]
-  if(hasArg(kind)) {
-    k <- sapply(a$features, `[[`, "kind")
-    s[a[k == kind]]
-  } else {
-    s[a[a$type == "entity"]]
-  }
-}
+    entities <- function(doc, kind) {
+     s <- doc$content
+     a <- annotations(doc)[[1]]
+     if(hasArg(kind)) {
+        k <- sapply(a$features, `[[`, "kind")
+          s[a[k == kind]]
+      } else {
+        s[a[a$type == "entity"]]
+      }
+    }
 
-entities(text_doc, kind = "person")
-entities(text_doc, kind = "location")
-entities(text_doc, kind = "organization")
-entities(text_doc, kind = "date")
-entities(text_doc, kind = "money")
+    entities(text_doc, kind = "person")
+    entities(text_doc, kind = "location")
+    entities(text_doc, kind = "organization")
+    entities(text_doc, kind = "date")
+    entities(text_doc, kind = "money")
 
 
 ## Visualising googleVis
