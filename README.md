@@ -65,13 +65,13 @@ Here I am try to perfom analysis using Natural Language Processing of the articl
 
 
 ## Visualising googleVis
-library(googleVis)
-plot(table(entities(text_doc, kind = "person")) )
+    library(googleVis)
+    plot(table(entities(text_doc, kind = "person")) )
 
-df_AE1 <- data.frame(table(entities(text_doc, kind = "person")))
-df_AE_bar1 <- gvisColumnChart(df_AE1)
-plot(df_AE_bar1)
+    df_AE1 <- data.frame(table(entities(text_doc, kind = "person")))
+    df_AE_bar1 <- gvisColumnChart(df_AE1)
+    plot(df_AE_bar1)
 
-df_AE2 <- data.frame(table(entities(text_doc, kind = "organization")))
-df_AE_bar2 <- gvisColumnChart(df_AE2)
-plot(df_AE_bar2)
+    df_AE2 <- data.frame(table(entities(text_doc, kind = "organization")))
+    df_AE_bar2 <- gvisColumnChart(df_AE2)
+    plot(df_AE_bar2)
