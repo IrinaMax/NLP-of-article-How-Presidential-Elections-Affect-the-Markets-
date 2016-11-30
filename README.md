@@ -67,6 +67,7 @@ Here I am try to perfom analysis using Natural Language Processing of the articl
 ## Visualising googleVis
     library(googleVis)
     plot(table(entities(text_doc, kind = "person")) )
+![rplot1](https://cloud.githubusercontent.com/assets/16123495/20739474/c36e42a0-b66f-11e6-9084-ba1fd89e56de.png)    
 
     df_AE1 <- data.frame(table(entities(text_doc, kind = "person")))
     df_AE_bar1 <- gvisColumnChart(df_AE1)
