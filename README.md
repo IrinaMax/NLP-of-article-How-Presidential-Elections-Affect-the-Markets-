@@ -72,6 +72,7 @@ Here I am try to perfom analysis using Natural Language Processing of the articl
     df_AE1 <- data.frame(table(entities(text_doc, kind = "person")))
     df_AE_bar1 <- gvisColumnChart(df_AE1)
     plot(df_AE_bar1)
+![screenshot r_nlp_entities_person](https://cloud.githubusercontent.com/assets/16123495/20739477/c7507bf4-b66f-11e6-868b-ef01b9612779.png)    
 
     df_AE2 <- data.frame(table(entities(text_doc, kind = "organization")))
     df_AE_bar2 <- gvisColumnChart(df_AE2)
