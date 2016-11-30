@@ -1,6 +1,7 @@
 # NLP-of-article-How-Presidential-Elections-Affect-the-Markets-
 Here I am try to perfom analysis using Natural Language Processing of the article “How Presidential Elections Affect the Markets” from 
 "Merill Lynch" https://www.ml.com/articles/how-presidential-elections-affect-the-markets.html
+![screenshot 2016-11-29 20 13 47](https://cloud.githubusercontent.com/assets/16123495/20739573/a35b03b2-b670-11e6-8852-04613c8fc199.png)
 
     ##Entity Recognition/extraction, Visualising output
 
