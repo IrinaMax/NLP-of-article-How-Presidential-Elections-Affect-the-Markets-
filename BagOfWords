@@ -9,6 +9,8 @@
 > tolower(text)
 [1] "<b>she</b> woke up at       6 a.m. it's so early!  she was only 10% awake and began drinking coffee in front of her computer."
 > 
+
+# Word stemming and stem completion on a sentence
 > # Remove punctuation
 > removePunctuation(text)
 [1] "bSheb woke up at       6 AM Its so early  She was only 10 awake and began drinking coffee in front of her computer"
@@ -137,3 +139,15 @@
         "to"        "fix"          "a"        "new" "complicate"        "too" 
      complic 
 "complicate"
+# Alter the function code to match the instructions
+clean_corpus <- function(corpus) {
+  # Remove punctuation
+  corpus <- tm_map(corpus, removePunctuation)
+  # Transform to lower case
+  corpus <- tm_map(corpus, content_transformer(tolower))
+  # Add more stopwords
+  corpus <- tm_map(corpus, removeWords, c(stopwords("en"), "coffee", "mug"))
+  # Strip whitespace
+  corpus <- tm_map(corpus, stripWhitespace)
+  return(corpus)
+}
