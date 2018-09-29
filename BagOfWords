@@ -171,3 +171,31 @@ $content
 > # Print out the same tweet in original form
 > tweets$text[227]
 [1] "Also, dogs aren't smart enough to dip the donut in the coffee and then eat the part that's been dipped. #ladyandthetramp"
+> # Create the dtm from the corpus: coffee_dtm
+> 
+> coffee_dtm <- DocumentTermMatrix(clean_corp)
+> # Print out coffee_dtm data
+> coffee_dtm
+<<DocumentTermMatrix (documents: 1000, terms: 3101)>>
+Non-/sparse entries: 7724/3093276
+Sparsity           : 100%
+Maximal term length: 33
+Weighting          : term frequency (tf)
+> 
+> 
+> # Convert coffee_dtm to a matrix: coffee_m
+> coffee_m <- as.matrix(coffee_dtm)
+> 
+> # Print the dimensions of coffee_m
+> dim(coffee_m)
+[1] 1000 3101
+> 
+> # Review a portion of the matrix to get some Starbucks
+> print(coffee_m[475:478, 2593:2594])
+     Terms
+Docs  star starbucks
+  475    0         0
+  476    0         0
+  477    0         0
+  478    0         2
+> 
