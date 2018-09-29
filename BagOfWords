@@ -199,3 +199,29 @@ Docs  star starbucks
   477    0         0
   478    0         2
 > 
+> # Create a TDM from clean_corp: coffee_tdm
+> 
+> coffee_tdm <- TermDocumentMatrix(clean_corp)
+> # Print coffee_tdm data
+> coffee_tdm
+<<TermDocumentMatrix (terms: 3101, documents: 1000)>>
+Non-/sparse entries: 7724/3093276
+Sparsity           : 100%
+Maximal term length: 33
+Weighting          : term frequency (tf)
+> 
+> 
+> # Convert coffee_tdm to a matrix: coffee_m
+> coffee_m <- as.matrix(coffee_tdm)
+> 
+> # Print the dimensions of the matrix
+> dim(coffee_m)
+[1] 3101 1000
+> 
+> # Review a portion of the matrix
+> coffee_m[2593:2594, 475:478]
+           Docs
+Terms       475 476 477 478
+  star        0   0   0   0
+  starbucks   0   0   0   2
+> 
