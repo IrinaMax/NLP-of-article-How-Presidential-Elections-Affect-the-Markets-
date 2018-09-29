@@ -139,7 +139,7 @@
         "to"        "fix"          "a"        "new" "complicate"        "too" 
      complic 
 "complicate"
-# Alter the function code to match the instructions
+# Make a function including all cleaning data
 clean_corpus <- function(corpus) {
   # Remove punctuation
   corpus <- tm_map(corpus, removePunctuation)
@@ -151,7 +151,7 @@ clean_corpus <- function(corpus) {
   corpus <- tm_map(corpus, stripWhitespace)
   return(corpus)
 }
-> # Function for apply all them
+> # Apply this function to the text
 > clean_corpus <- function(corpus){
     corpus <- tm_map(corpus, removePunctuation)
     corpus <- tm_map(corpus, content_transformer(tolower))
