@@ -151,3 +151,23 @@ clean_corpus <- function(corpus) {
   corpus <- tm_map(corpus, stripWhitespace)
   return(corpus)
 }
+> # Function for apply all them
+> clean_corpus <- function(corpus){
+    corpus <- tm_map(corpus, removePunctuation)
+    corpus <- tm_map(corpus, content_transformer(tolower))
+    corpus <- tm_map(corpus, removeWords, c(stopwords("en"), "coffee", "mug"))
+    corpus <- tm_map(corpus, stripWhitespace)
+    return(corpus)
+  }
+> 
+> # Appling customized function to the tweet_corp: clean_corp
+> clean_corp <- clean_corpus(tweet_corp)
+> 
+> # Print out a cleaned up tweet
+> clean_corp[[227]][1]
+$content
+[1] "also dogs arent smart enough dip donut eat part thats dipped ladyandthetramp"
+> 
+> # Print out the same tweet in original form
+> tweets$text[227]
+[1] "Also, dogs aren't smart enough to dip the donut in the coffee and then eat the part that's been dipped. #ladyandthetramp"
