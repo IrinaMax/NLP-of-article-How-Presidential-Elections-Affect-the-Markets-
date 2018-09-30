@@ -341,5 +341,96 @@ color_pal
 # Create a wordcloud with the selected palette
 wordcloud(chardonnay_freqs$term, chardonnay_freqs$num, max.words = 100, colors = color_pal)
 
+#Fined common words
+# Create all_coffee
+all_coffee <- paste(coffee_tweets$text, collapse = " ")
+# Create all_chardonnay
+all_chardonnay <- paste(chardonnay_tweets$text, collapse = " ")
+# Create all_tweets
+all_tweets <- c(all_coffee, all_chardonnay)
+# Convert to a vector source
+all_tweets <- VectorSource(all_tweets)
+# Create all_corpus
+all_corpus <- VCorpus(all_tweets)
 
-          
+## Plot common words cloud
+> # Clean the corpus
+> all_clean <- clean_corpus(all_corpus)
+> # Create all_tdm
+> all_tdm <- TermDocumentMatrix(all_clean)
+> # Create all_m
+> all_m <- as.matrix(all_tdm)
+> # Print a commonality cloud
+> commonality.cloud(all_m, max.words = 100, colors = "steelblue")
+
+> # Plot of comparison to Visualize dissimilar words
+> all_clean <- clean_corpus(all_corpus)
+> # Create all_tdm
+> all_tdm <- TermDocumentMatrix(all_clean)
+> # Give the columns distinct names
+> colnames(all_tdm) <- c("coffee", "chardonnay")
+> # Create all_m
+> all_m <- as.matrix(all_tdm)
+> # Create comparison cloud
+> comparison.cloud(all_m, colors = c("orange", "blue"), max.words = 50)
+> 
+> #Polarized tag cloud
+> top25_df <- all_tdm_m %>%
+    # Convert to data frame
+    as_data_frame(rownames = "word") %>% 
+    # Keep rows where word appears everywhere
+    filter_all(all_vars(. > 0)) %>% 
+    # Get difference in counts
+    mutate(difference = chardonnay - coffee) %>% 
+    # Keep rows with biggest difference
+    top_n(25, wt = difference) %>% 
+    # Arrange by descending difference
+    arrange(desc(difference))
+> 
+> pyramid.plot(
+    # Chardonnay counts
+    top25_df$chardonnay, 
+    # Coffee counts
+    top25_df$coffee, 
+    # Words
+    labels = top25_df$word, 
+    top.labels = c("Chardonnay", "Words", "Coffee"), 
+    main = "Words in Common", 
+    unit = NULL,
+    gap = 8,
+  )
+[1] 5.1 4.1 4.1 2.1
+
+# Word association
+word_associate(chardonnay_tweets$text, match.string = "marvin", 
+               stopwords = c(Top200Words, "chardonnay", "amp"), 
+               network.plot = TRUE, cloud.colors = c("gray85", "darkred"))
+
+# Add title
+title(main = "Chardonnay Tweets Associated with Marvin")
+
+> # Word association
+> word_associate(coffee_tweets$text, match.string = "barista", 
+                 stopwords = c(Top200Words, "coffee", "amp"), 
+                 network.plot = TRUE, cloud.colors = c("gray85", "darkred"))
+Warning message: length of colors should be 1 more than length of recode.words
+  row group unit text                                                                                                                                
+1 544   all  544 RT @Barista_kyo: #coffee #latte #soylatte #thinkcoffee # # # # @ think coffee http://t.co/Hmy9RPRWTZ                                
+2 569   all  569 RT @ReversoSmith: What a beautiful mess! #portafilter #coffee #espresso #coffeemachine #barista #baristalife? http://t.co/ZODcTfP22Z
+3 658   all  658 The moment you realize your Starbucks barista gave you a regular iced Coffee when u asked 4 decaf. Shitty. Late night not planned.  
+4 931   all  931 Barista made my coffee wrong and still gave me both anyway #Starbucks #coffee #caffeine #upallnight http://t.co/iKCNwO8F6t          
+5 951   all  951 RT @FrankIero: hahaha @jamiasan :*gives Barista our Starbucks order* Barista: coffee? @jamiasan : yes, isn't this is a coffee store?
+
+Match Terms
+===========
+
+List 1:
+baristakyo, barista, baristalife
+
+> 
+> # Add title
+> title(main = "Barista Coffee Tweet Associations")
+
+# Simple word clustering
+# Plot a dendrogram
+plot(hc)
