@@ -273,3 +273,52 @@ plot(frequency)
 > 
 > # Make a frequency barchart
 > plot(frequency)
+library(wordcloud)
+> # Load wordcloud package
+> 
+> 
+> # Print the first 10 entries in term_frequency
+> term_frequency[1:10]
+chardonnay     marvin       wine       gaye       just      glass       like 
+       824        104         83         76         75         63         52 
+    bottle        lol     little 
+        47         43         35
+> 
+> # Vector of terms
+> terms_vec<-names(term_frequency)
+> 
+> # Create a wordcloud for the values in word_freqs
+> wordcloud(terms_vec, as.matrix(term_frequency), max.words = 50, colors = "red" )
+> ## term_frequency is loaded into your workspace
+> library(wordcloud)
+> # Print the first 10 entries in term_frequency
+> term_frequency[1:10]
+chardonnay     marvin       wine       gaye       just      glass       like 
+       824        104         83         76         75         63         52 
+    bottle        lol     little 
+        47         43         35
+> 
+> # Vector of terms
+> terms_vec<-names(term_frequency)
+> 
+> # Create a wordcloud for the values in word_freqs
+> wordcloud(terms_vec, term_frequency, max.words = 50, colors = "red" )
+> 
+> # Add to stopwords
+> stops <- c(stopwords(kind = 'en'), 'chardonnay')
+> # Review a "cleaned" tweet
+#head(content(chardonnay_corp))
+
+> # Review last 6 stopwords
+> tail(stops)
+[1] "same"       "so"         "than"       "too"        "very"      
+[6] "chardonnay"
+> 
+> # Apply to a corpus
+> cleaned_chardonnay_corp <- tm_map(chardonnay_corp, removeWords, stops)
+> 
+> # Review a "cleaned" tweet again
+> content(cleaned_chardonnay_corp[[24]])
+[1] " brought  marvin gaye  "
+> content(chardonnay_corp[[24]])
+[1] " brought  marvin gaye  chardonnay"
