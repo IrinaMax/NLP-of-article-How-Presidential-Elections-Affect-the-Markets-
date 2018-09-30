@@ -225,3 +225,51 @@ Terms       475 476 477 478
   star        0   0   0   0
   starbucks   0   0   0   2
 > 
+> ## coffee_tdm is still loaded in your workspace
+> 
+> # Create a matrix: coffee_m
+> coffee_m  <-as.matrix(coffee_tdm)
+> 
+> # Calculate the rowSums: term_frequency
+> term_frequency <- rowSums(coffee_m)
+> 
+> # Sort term_frequency in descending order
+> term_frequency<- sort(term_frequency, decreasing = TRUE)
+> 
+> # View the top 10 most common words
+> head(term_frequency,10)
+    like      cup      one     shop     just      get  morning     want 
+     111      103       79       69       66       62       57       49 
+drinking      can 
+      47       45
+> 
+> # term_frequency[1:10]
+> # Plot a barchart of the 10 most common words
+> barplot(term_frequency[1:10], col = "tan", las = 2)
+> 
+> # Make a frequency barchart
+> plot(frequency)
+> # fast way to get frequent terms is with freq_terms() from qdap
+> frequency <- freq_terms(
+    tweets$text, 
+    top = 10, 
+    at.least = 3, 
+    stopwords = "Top200Words"
+  )
+> 
+> # Make a frequency barchart
+> plot(frequency)
+
+# Make a frequency barchart
+plot(frequency)
+# Make a frequency barchart
+> # Create frequency
+> frequency <- freq_terms(
+    tweets$text, 
+    top = 10, 
+    at.least = 3, 
+    stopwords = stopwords("english")
+  )
+> 
+> # Make a frequency barchart
+> plot(frequency)
