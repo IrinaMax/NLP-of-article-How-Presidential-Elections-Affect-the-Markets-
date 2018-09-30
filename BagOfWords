@@ -286,7 +286,8 @@ chardonnay     marvin       wine       gaye       just      glass       like
 > 
 > # Vector of terms
 > terms_vec<-names(term_frequency)
-> 
+> > # Review a "cleaned" tweet
+#head(content(chardonnay_corp))
 > # Create a wordcloud for the values in word_freqs
 > wordcloud(terms_vec, as.matrix(term_frequency), max.words = 50, colors = "red" )
 > ## term_frequency is loaded into your workspace
@@ -303,12 +304,8 @@ chardonnay     marvin       wine       gaye       just      glass       like
 > 
 > # Create a wordcloud for the values in word_freqs
 > wordcloud(terms_vec, term_frequency, max.words = 50, colors = "red" )
-> 
-> # Add to stopwords
+> # Add to stopwords to remove some non-insightful terms.
 > stops <- c(stopwords(kind = 'en'), 'chardonnay')
-> # Review a "cleaned" tweet
-#head(content(chardonnay_corp))
-
 > # Review last 6 stopwords
 > tail(stops)
 [1] "same"       "so"         "than"       "too"        "very"      
@@ -322,3 +319,27 @@ chardonnay     marvin       wine       gaye       just      glass       like
 [1] " brought  marvin gaye  "
 > content(chardonnay_corp[[24]])
 [1] " brought  marvin gaye  chardonnay"
+# Sort the chardonnay_words in descending order
+sorted_chardonnay_words<- sort(chardonnay_words, decreasing = TRUE)
+# Print the 6 most frequent chardonnay terms
+head(sorted_chardonnay_words, 6)
+# Get a terms vector
+term_vec <- names(chardonnay_words)
+# Create a wordcloud for the values in word_freqs
+wordcloud(term_vec, chardonnay_words, 
+          max.words = 50, colors = "red")
+
+# Print the wordcloud with the specified colors,can specify a vector of colors to make certain words stand out or to fit an existing color scheme.
+wordcloud(chardonnay_freqs$term, 
+          chardonnay_freqs$num, 
+          max.words = 100, 
+          colors = c("grey80", "darkgoldenrod1", "tomato")
+# We also can prebuilt palette with colors for improve cloud          
+# Select 5 colors 
+color_pal <- cividis(n=5)
+color_pal
+# Create a wordcloud with the selected palette
+wordcloud(chardonnay_freqs$term, chardonnay_freqs$num, max.words = 100, colors = color_pal)
+
+
+          
