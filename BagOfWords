@@ -434,3 +434,148 @@ baristakyo, barista, baristalife
 # Simple word clustering
 # Plot a dendrogram
 plot(hc)
+> # Create dist_rain
+> dist_rain <- dist(rain[,2])
+> 
+> # View the distance matrix
+> dist_rain
+      1     2     3
+2  0.00            
+3  4.63  4.63      
+4 23.31 23.31 18.68
+> 
+> # Create hc
+> hc <- hclust(dist_rain)
+> 
+> # Plot hc
+> plot(hc, labels = rain$city)
+> > # Print the dimensions of tweets_tdm. The professional settings a good dendrogram is based on a TDM with 25 to 70 terms. Having more than 70 terms may mean the visual will be cluttered and incomprehensible
+> dim(tweets_tdm)
+[1] 3207 1000
+> # Create tdm1
+>  tdm1 <-removeSparseTerms(tweets_tdm, sparse = 0.95)
+> # Create tdm2
+> tdm2 <- removeSparseTerms(tweets_tdm, sparse = 0.975)
+> # Print tdm1
+> tdm1
+<<TermDocumentMatrix (terms: 25, documents: 1000)>>
+Non-/sparse entries: 3778/21222
+Sparsity           : 85%
+Maximal term length: 10
+Weighting          : term frequency (tf)
+> # Print tdm2
+> tdm2
+<<TermDocumentMatrix (terms: 55, documents: 1000)>>
+Non-/sparse entries: 4892/50108
+Sparsity           : 91%
+Maximal term length: 10
+Weighting          : term frequency (tf)
+
+# Create tweets_tdm2
+tweets_tdm2 <- removeSparseTerms(tweets_tdm, sparse = 0.975)
+# Create tdm_m
+tdm_m <- as.matrix(tweets_tdm2)
+# Create tweets_dist
+tweets_dist <- dist(tdm_m)
+# Create hc
+hc <- hclust(tweets_dist)
+# Plot the dendrogram
+plot(hc)
+
+# Try to improve the dendrogram
+> hcd <- as.dendrogram(hc)
+> # Print the labels in hcd
+> labels(hcd)
+ [1] "chardonnay" "you"        "to"         "is"         "amp"       
+ [6] "this"       "gaye"       "marvin"     "my"         "with"      
+[11] "it"         "for"        "on"         "just"       "me"        
+[16] "that"       "glass"      "like"       "in"         "wine"      
+[21] "a"          "of"         "the"        "and"        "i"
+> # Change the branch color to red for "marvin" and "gaye"
+> hcd_colored <- branches_attr_by_labels(hcd, c("marvin", "gaye"), color =  "red") 
+> # Plot hcd
+> plot(hcd_colored, main = "Better Dendrogram")
+> # Add cluster rectangles where “marvin” and “gaye” branches are highlighted red.
+> rect.dendrogram(hcd_colored, k=2, border = "grey50")
+> 
+# Correlation is a powerful tool at your disposal.
+> associations <- findAssocs(tweets_tdm, "venti", 0.2) # function will return a list of all other terms that meet or exceed the minimum threshold.
+> # View the venti associations
+> associations
+$venti
+    breve   drizzle    entire     pumps     extra       cuz    forget      okay 
+     0.58      0.58      0.58      0.58      0.47      0.41      0.41      0.41 
+    hyper     mocha   vanilla       wtf    always    asleep       get starbucks 
+     0.33      0.33      0.33      0.29      0.26      0.26      0.25      0.25 
+    white 
+     0.23
+> # Create associations_df
+> associations_df <- list_vect2df(associations, col2 = "word",  col3 = "score")
+> # Plot the associations_df values
+> ggplot(associations_df, aes(score, word)) + 
+    geom_point(size = 3) + 
+    theme_gdocs()
+ # Minimum correlation values are often relatively low because of word diversity. Don't be surprised if 0.10 demonstrates a strong pairwise term association.
+ #Bigrams are a powerful way to explore text and useful derive phrases.
+ # We also can make tokenizer customer function using RWeka library and achive good result increasing number of circles and terms in DTM and dicreasing non sparse entries
+> tokenizer <- function(x){
+    NGramTokenizer(x, Weka_control(min=2, max=2))
+  }
+> # Create unigram_dtm
+> unigram_dtm <- DocumentTermMatrix(text_corp)
+> # Create bigram_dtm
+> bigram_dtm <- DocumentTermMatrix(text_corp, control = list(tokenize=tokenizer))
+> # Print unigram_dtm
+> unigram_dtm
+<<DocumentTermMatrix (documents: 1000, terms: 3004)>>
+Non-/sparse entries: 8065/2995935
+Sparsity           : 100%
+Maximal term length: 27
+Weighting          : term frequency (tf)
+> # Print bigram_dtm
+> bigram_dtm
+<<DocumentTermMatrix (documents: 1000, terms: 5555)>>
+Non-/sparse entries: 7802/5547198
+Sparsity           : 100%
+Maximal term length: 40
+Weighting          : term frequency (tf)
+> 
+# cleaned and organized into a DTM called bigram_dtm.
+> bigram_dtm_m <- as.matrix(bigram_dtm)
+> # Create freq
+> freq <- colSums( bigram_dtm_m )
+> # Create bi_words
+> bi_words <- names(freq)
+> # Examine part of bi_words
+> str_subset(bi_words, "^marvin")
+ [1] "marvin big"          "marvin bigsean"      "marvin eduaubdedubu"
+ [4] "marvin feat"         "marvin gay"          "marvin gaye"        
+ [7] "marvin got"          "marvin high"         "marvin now"         
+[10] "marvin really"       "marvin song"         "marvin will"
+> # Plot a wordcloud
+> wordcloud(bi_words, freq, max.words = 15)
+> 
+> # Create a TDM to Change frequency weights
+> tdm <- TermDocumentMatrix(text_corp)
+> # Convert it to a matrix
+> tdm_m <- as.matrix(tdm)
+> # Examine part of the matrix
+> tdm_m[c("coffee", "espresso", "latte"), 161:166]
+          Docs
+Terms      161 162 163 164 165 166
+  coffee     1   1   1   2   0   1
+  espresso   1   0   0   0   0   0
+  latte      0   0   0   0   0   1
+  
+> If we change adding control with TFidf we can see how to changed result
+> tdm_tfidf <- TermDocumentMatrix(text_corp, control = list(weighting = weightTfIdf))
+
+> tdm_tfidf_M <- as.matrix(tdm)
+> # Examine part of the matrix
+> tdm_tfidf_m[c("coffee", "espresso", "latte"), 161:166]
+          Docs
+Terms              161         162         163        164 165         166
+  coffee   0.005611691 0.008729297 0.005611691 0.02618789   0 0.009820459
+  espresso 0.545989728 0.000000000 0.000000000 0.00000000   0 0.000000000
+  latte    0.000000000 0.000000000 0.000000000 0.00000000   0 1.047602723
+> 
