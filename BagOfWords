@@ -770,4 +770,47 @@ Google's negative reviews discuss "politics", "getting big", "bureaucracy", and 
                top.labels = c("Amzn", "Pro Words", "Goog"), 
                main = "Words in Common", unit = NULL)
 [1] 5.1 4.1 4.1 2.1
+> > # Extract top 5 common bigrams
+> (top5_df <- top_n(common_words, 5, diff))
+  AmazonNeg GoogleNeg            terms diff
+1         3        12        can think    9
+2        20         8     life balance   12
+3        29        10       long hours   19
+4        21         8        work life   13
+5        21         8 worklife balance   13
 > 
+
+#Cage match with Negative reviews
+#In both organizations, people mentioned "culture" and "smart people", so there are some similar positive aspects between the two companies. However with the pyramid plot you can start to infer degrees of positive features of the work environments.
+
+> # Create a pyramid plot
+> pyramid.plot(
+      # Amazon on the left
+      top5_df$AmazonNeg,
+      # Google on the right
+      top5_df$GoogleNeg,
+      # Use terms for labels
+      labels = top5_df$terms,
+      # Set the gap to 12
+      gap = 12,
+      # Set top.labels to "Amzn", "Neg words" & "Goog"
+      top.labels = c("Amzn", "Neg Words", "Goog"),
+      main = "Words in Common", 
+      unit = NULL
+  )
+[1] 5.1 4.1 4.1 2.1
+
+#  Recall that you used findAssocs() to get a named vector of phrases. 
+#These may lead to a conclusion about the type of person who favorably views an intense workload.
+> findAssocs(amzn_p_tdm, "fast paced", 0.2)[[1]][1:15]
+ paced environment  environments ever         learn fast     paced friendly 
+              0.49               0.35               0.35               0.35 
+        paced work         able excel     activity ample        advance one 
+              0.35               0.25               0.25               0.25 
+         also well        amount time  ample opportunity  assistance ninety 
+              0.25               0.25               0.25               0.25 
+benefits including     break computer      call activity 
+              0.25               0.25               0.25
+              
+# Identify candidates that view an intense workload as an opportunity to learn fast and give them ample opportunity.
+
