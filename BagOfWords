@@ -689,16 +689,85 @@ amzn_c_tdm2 <- removeSparseTerms(amzn_c_tdm, sparse = .993)
 hc <-hclust(dist(amzn_c_tdm2), method = "complete") 
 # Produce a plot of hc
 plot(hc)
-# Create amzn_p_tdm
-amzn_p_tdm <- TermDocumentMatrix(amzn_pros_corp, control = list(tokenize = tokenizer))
-# Create amzn_p_m
-amzn_p_m <- as.matrix(amzn_p_tdm)
-# Create amzn_p_freq
-amzn_p_freq <- rowSums(amzn_p_m) 
-# Create term_frequency
-term_frequency <- sort(amzn_p_freq, decreasing= TRUE )
-# Print the 5 most common terms
-term_frequency[1:5]
-# Find associations with fast paced
-findAssocs(amzn_p_tdm, "fast paced", 0.2)
 
+# examining top phrases that appeared in the word clouds, hope to find associated term
+> amzn_p_tdm <- TermDocumentMatrix(amzn_pros_corp, control = list(tokenize = tokenizer))
+> # Create amzn_p_m
+> amzn_p_m <- as.matrix(amzn_p_tdm)
+> # Create amzn_p_freq
+> amzn_p_freq <- rowSums(amzn_p_m)
+> # Create term_frequency
+> term_frequency <- sort(amzn_p_freq, decreasing= TRUE )
+> # Print the 5 most common terms
+> term_frequency[1:5]
+      good pay great benefits   smart people     place work     fast paced 
+            25             24             20             17             16
+> # Find associations with fast paced
+> findAssocs(amzn_p_tdm, "fast paced", 0.2)
+$`fast paced`
+       paced environment        environments ever               learn fast 
+                    0.49                     0.35                     0.35 
+          paced friendly               paced work               able excel 
+                    0.35                     0.35                     0.25 
+          activity ample              advance one                also well 
+                    0.25                     0.25                     0.25 
+                    ...  
+# Quick review of Google reviews
+# I used comparison.cloud() of Google's positive and negative reviews for comparison to Amazon. 
+# This will give a quick understanding of top terms without having to spend as much time as I did examining the Amazon reviews.
+                   
+> # Build a comparison cloud
+> comparison.cloud(all_m, 
+      max.words = 100, 
+      colors = c("#F44336", "#2196f3"))
+> # Create all_goog_corp
+> all_goog_corp <- tm_clean(all_goog_corpus)
+> # Create all_tdm
+> all_tdm <-  TermDocumentMatrix(all_goog_corp)
+> # Create all_m
+> all_m <- as.matrix(all_tdm)
+> head(all_m)
+                  Docs
+Terms              Goog_Pros Goog_Cons
+  <e2><80><a6><e2>         0         4
+  abandon                  0         1
+  ability                  4         0
+  able                     3         1
+  absolute                 1         0
+  absolutely               4         1
+> # Build a comparison cloud
+> comparison.cloud(all_m, 
+      max.words = 100, 
+      colors = c("#F44336", "#2196f3"))
+# Cage match! Amazon vs. Google pro reviews
+#Amazon's positive reviews appear to mention bigrams such as "good benefits", while its negative reviews focus on bigrams such as 
+"work load" and "work-life balance" issues.
+
+#In contrast, Google's positive reviews mention "great food", "perks", "smart people", and "fun culture", among other things. 
+Google's negative reviews discuss "politics", "getting big", "bureaucracy", and "middle management".
+
+# I am going to make a pyramid plot lining up positive reviews for Amazon and Google so to compare the differences between any shared bigrams.
+> # Filter to words in common and create an absolute diff column
+> common_words <- all_tdm_df %>% 
+    filter(
+      AmazonPro != 0,
+      GooglePro != 0
+    ) %>%
+    mutate(diff = abs(AmazonPro - GooglePro))
+> 
+> # Extract top 5 common bigrams
+> (top5_df <- top_n(common_words,5, diff))
+  AmazonPro GooglePro            terms diff
+1         3        12        can think    9
+2        20         8     life balance   12
+3        29        10       long hours   19
+4        21         8        work life   13
+5        21         8 worklife balance   13
+> 
+> # Create the pyramid plot
+> pyramid.plot(top5_df$AmazonPro, top5_df$GooglePro, 
+               labels = top5_df$terms, gap = 12, 
+               top.labels = c("Amzn", "Pro Words", "Goog"), 
+               main = "Words in Common", unit = NULL)
+[1] 5.1 4.1 4.1 2.1
+> 
