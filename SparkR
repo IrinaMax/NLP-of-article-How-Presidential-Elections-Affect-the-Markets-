@@ -1,0 +1,32 @@
+> # track_metadata_tbl has been pre-defined
+> track_metadata_tbl
+# Source:   table<track_metadata> [?? x 11]
+# Database: spark_connection
+   track_id title song_id release artist_id artist_mbid artist_name duration
+   <chr>    <chr> <chr>   <chr>   <chr>     <chr>       <chr>          <dbl>
+ 1 TRSTWXA~ The ~ SOCQMX~ Espana  ARNNU4G1~ 5c176092-c~ 101 Strings     221.
+ 2 TRQNQZX~ Soul~ SOWULX~ Diary ~ ARJ9DSA1~ 4756395c-5~ John Mayal~     368.
+ 3 TRTPVEB~ The ~ SOHKYI~ The Bl~ ARQ8CJ61~ 15ab8bb8-7~ Illinois J~     329.
+ 4 TRZZNFB~ The ~ SOJVHK~ Give M~ ARFAKTH1~ 0174d942-3~ Chairmen O~     193.
+ 5 TRZAAWN~ Litt~ SORYVB~ Beauti~ ARNMWP51~ 4dca4bb2-2~ Curtis May~     321.
+ 6 TRRAOAD~ Will~ SODTBY~ Jammys~ ARMDWND1~ 8ee00333-e~ Black Uhuru     179.
+ 7 TRPGBAO~ Chil~ SOCTEW~ Pure A~ ARBSLZ11~ f940c4dd-f~ Alex de Gr~     162.
+ 8 TRQLTYD~ Ring~ SONNCT~ Eat To~ ARM7YQQ1~ 4d2956d1-a~ Blondie         210.
+ 9 TRJNORS~ Chat~ SOGQHH~ Sid Si~ ARBK4PS1~ 637504e3-b~ Sid Vicious     111.
+10 TRLSQUC~ Migh~ SOTFGI~ Rockin~ ARRHNLN1~ d86c3c8b-8~ Jelly Roll~     242.
+# ... with 990 more rows, and 3 more variables: artist_familiarity <dbl>,
+#   artist_hotttnesss <dbl>, year <int>
+> 
+> # Manipulate the track metadata
+> track_metadata_tbl %>%
+    # Select columns
+    select(title, duration) %>%
+    # Mutate columns
+    mutate(duration_minutes =  duration/60) %>%
+    # Summarize columns
+    summarize(mean_duration_minutes = mean(duration_minutes))
+# Source:   lazy query [?? x 1]
+# Database: spark_connection
+  mean_duration_minutes
+                  <dbl>
+1                  3.54
